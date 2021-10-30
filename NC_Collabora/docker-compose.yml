@@ -1,12 +1,12 @@
-version: '2.1'
+version: '2.3'
 services:
 
   nginx-proxy:
     image: jwilder/nginx-proxy
     restart: always
     volumes:
-      - nginx-proxy-certs:/etc/nginx/certs:ro
-      - nginx-proxy-vhost:/etc/nginx/vhost.d
+      - ./nginx-proxy-certs:/etc/nginx/certs:ro
+      - ./nginx-proxy-vhost:/etc/nginx/vhost.d
       - /opt/docker-files/nginx-proxy/network_internal.conf:/etc/nginx/network_internal.conf
       - /usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
@@ -22,7 +22,7 @@ services:
     image: jrcs/letsencrypt-nginx-proxy-companion
     restart: always
     volumes:
-      - nginx-proxy-certs:/etc/nginx/certs:rw
+      - ./nginx-proxy-certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
       - nginx-proxy
@@ -38,7 +38,7 @@ services:
       - MYSQL_USER=ncuser
       - MYSQL_PASSWORD=db_passwd                # change this
     volumes:
-      - ncdb-data:/var/lib/mysql
+      - ./ncdb-data:/var/lib/mysql
     networks:
       cloud-network:
         
@@ -48,10 +48,10 @@ services:
     depends_on:
       - ncdb
     volumes:
-      - nc-nextcloud:/var/www/html
-      - nc-apps:/var/www/html/custom_apps
-      - nc-config:/var/www/html/config
-      - nc-data:/var/www/html/data
+      - ./nc-nextcloud:/var/www/html
+      - ./nc-apps:/var/www/html/custom_apps
+      - ./nc-config:/var/www/html/config
+      - ./nc-data:/var/www/html/data
     environment:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=ncuser
